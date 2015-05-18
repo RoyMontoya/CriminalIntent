@@ -1,5 +1,8 @@
 package com.example.amado.criminalintent;
 
+import android.util.Log;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -14,6 +17,8 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+    public static final String TAG = "Crime";
+
 
     public Crime(){
         mId = UUID.randomUUID();
@@ -32,12 +37,19 @@ public class Crime {
         mTitle = title;
     }
 
-    public String getDate() {
+    public Date getDate() {
         String format = "yyyy-MM-dd HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-        return sdf.format(mDate).toString();
+        SimpleDateFormat sdf= new SimpleDateFormat(format);
+        String d1 = sdf.format(mDate);
+        Date date=mDate;
+        //parsing is not working
+        try{
 
-
+            date = sdf.parse(d1);
+        }catch (ParseException e){
+          e.printStackTrace();
+        }
+      return date;
     }
 
     @Override
