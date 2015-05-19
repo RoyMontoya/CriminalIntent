@@ -10,4 +10,7 @@
     <string name="crimes_title">Crimes</string>
     <string name="title_activity_crime_pager">CrimePagerActivity</string>
     <string name="date_picker_title">Date of crime:</string>
+    <string name="date_picker_button">DatePicker</string>
+    <string name="time_picker_button">TimePicker</string>
+    <string name="dialog_selector_title">Select a Picker</string>
 </resources>

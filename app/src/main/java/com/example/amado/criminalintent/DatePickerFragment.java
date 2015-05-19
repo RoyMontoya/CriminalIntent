@@ -3,24 +3,28 @@ package com.example.amado.criminalintent;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+
 import android.view.View;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 /**
  * Created by Amado on 16/05/2015.
  */
-public class DatePickerFragment extends DialogFragment {
+public class DatePickerFragment extends android.support.v4.app.DialogFragment {
     public static final String EXTRA_DATE = "com.example.amado.criminalintent.date";
     private Date mDate;
+    private Crime mCrime;
+
 
 
     public static DatePickerFragment newInstance(Date date){
@@ -36,12 +40,18 @@ public class DatePickerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        mDate = (Date)getArguments().getSerializable(EXTRA_DATE);
+        UUID crimeId = CrimeLab.getCurrentCrime();
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+
+
+        mDate = mCrime.getDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mDate);
         int year = calendar.get(calendar.YEAR);
         int month = calendar.get(calendar.MONTH);
         int day = calendar.get(calendar.DAY_OF_MONTH);
+        final int hour = calendar.get(calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(calendar.MINUTE);
 
         View v = getActivity().getLayoutInflater().inflate(R.layout.dialog_date, null);
 
@@ -49,7 +59,7 @@ public class DatePickerFragment extends DialogFragment {
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mDate = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+                mDate = new GregorianCalendar(year, monthOfYear, dayOfMonth, hour, minute).getTime();
                 getArguments().putSerializable(EXTRA_DATE, mDate);
             }
         });

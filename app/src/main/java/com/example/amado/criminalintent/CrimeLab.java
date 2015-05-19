@@ -12,7 +12,15 @@ public class CrimeLab {
     public static CrimeLab sCrimeLab;
     private final Context mContext;
     private ArrayList<Crime> mCrimes;
+    public static UUID sCurrentCrime;
 
+    public static UUID getCurrentCrime() {
+        return sCurrentCrime;
+    }
+
+    public static void setCurrentCrime(UUID currentCrime) {
+        sCurrentCrime = currentCrime;
+    }
 
     private CrimeLab (Context context){
         mContext = context;
@@ -43,6 +51,7 @@ public class CrimeLab {
             }
             return null;
         }
+
 
 
 }
