@@ -1,14 +1,18 @@
 package com.example.amado.criminalintent;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -47,6 +51,7 @@ private EditText mTitleField;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         UUID crimeid = (UUID)getArguments().getSerializable(EXTRA_CRIME_ID);
 
         CrimeLab.setCurrentCrime(crimeid);
@@ -55,11 +60,18 @@ private EditText mTitleField;
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeid);
 
     }
-
+    @TargetApi(11)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
          View v = inflater.inflate(R.layout.fragment_crime, container, false);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+            if(NavUtils.getParentActivityName(getActivity())!= null) {
+                getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
+
+
         mTitleField = (EditText) v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
@@ -88,10 +100,7 @@ private EditText mTitleField;
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_SELECTOR);
 
-                /*
-                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
-                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
-                dialog.show(fm, DIALOG_DATE);*/
+
             }
         });
 
@@ -124,6 +133,19 @@ private EditText mTitleField;
             mCrime.setDate(date);
 
            updateDate();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) !=null){
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

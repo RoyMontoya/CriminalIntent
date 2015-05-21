@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -96,19 +94,19 @@ public class SelectorDialogFragment extends DialogFragment {
         if(requestCode == CrimeFragment.REQUEST_DATE){
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 
-            setTime(date);
+            setDime(date);
 
         }
         if(requestCode == REQUEST_TIME){
             Date date = (Date)data.getSerializableExtra(TimePickerFragment.TIME_DATE);
 
-            setTime(date);
+            setDime(date);
 
         }
     }
 
 
-    public void setTime(Date date){
+    public void setDime(Date date){
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -119,7 +117,7 @@ public class SelectorDialogFragment extends DialogFragment {
         int minute = calendar.get(calendar.MINUTE);
         mDate = new GregorianCalendar(year,month,day,hour,minute).getTime();
 
-       
+
 
     }
 

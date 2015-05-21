@@ -13,4 +13,11 @@
     <string name="date_picker_button">DatePicker</string>
     <string name="time_picker_button">TimePicker</string>
     <string name="dialog_selector_title">Select a Picker</string>
+    <string name="new_crime">New Crime</string>
+    <string name="show_subtitle">Show subtitle</string>
+    <string name="hide_subtitle">Hide subtitle</string>
+    <string name="subtitle">If you see something, say something.</string>
+    <string name="delete_crime">Delete</string>
+    <string name="text_empty">There are no crimes yet! Create a Crime!</string>
+    <string name="add_button_empty">Add Crime</string>
 </resources>
