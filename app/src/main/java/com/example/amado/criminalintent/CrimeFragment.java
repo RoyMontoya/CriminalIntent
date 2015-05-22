@@ -12,6 +12,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,9 +145,24 @@ private EditText mTitleField;
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_crime_pager, menu);
+    //TODO
+       // implement delete
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) !=null){
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+
+            case R.id.crime_delete:
+                CrimeLab.get(getActivity()).deleteCrime(mCrime);
                 if (NavUtils.getParentActivityName(getActivity()) !=null){
                     NavUtils.navigateUpFromSameTask(getActivity());
                 }
