@@ -20,4 +20,5 @@
     <string name="delete_crime">Delete</string>
     <string name="text_empty">There are no crimes yet! Create a Crime!</string>
     <string name="add_button_empty">Add Crime</string>
+    <string name="take">Take!</string>
 </resources>
