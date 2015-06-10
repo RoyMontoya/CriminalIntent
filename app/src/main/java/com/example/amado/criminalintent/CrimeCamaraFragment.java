@@ -1,18 +1,23 @@
 package com.example.amado.criminalintent;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import java.io.FileOutputStream;
@@ -28,6 +33,10 @@ public class CrimeCamaraFragment extends Fragment{
     private View mProgressContainer;
     private android.hardware.Camera mCamera;
     private SurfaceView mSurfaceView;
+    private int mOrientation;
+    public static final String EXTRA_PHOTO_FILENAME =
+            "com.example.amado.criminalintent.photo_filename";
+    public static final String EXTRA_ORIENTATION = "orientation";
 
 
     private android.hardware.Camera.ShutterCallback mShutterCallback = new android.hardware.Camera.ShutterCallback() {
@@ -59,7 +68,12 @@ public class CrimeCamaraFragment extends Fragment{
                 }
             }
             if(sucess){
-                Log.i(TAG, "Jpeg saved at "+fileName);
+               Intent i = new Intent();
+                i.putExtra(EXTRA_PHOTO_FILENAME, fileName);
+                i.putExtra(EXTRA_ORIENTATION, mOrientation);
+                getActivity().setResult(Activity.RESULT_OK, i);
+            }else{
+                getActivity().setResult(Activity.RESULT_CANCELED);
             }
             getActivity().finish();
         }
@@ -80,6 +94,10 @@ public class CrimeCamaraFragment extends Fragment{
             public void onClick(View v) {
                if(mCamera != null){
                    mCamera.takePicture(mShutterCallback, null, mJpegCallback);
+                   Display display = ((WindowManager)getActivity().getSystemService(getActivity().WINDOW_SERVICE))
+                           .getDefaultDisplay();
+                   mOrientation = display.getRotation();
+
                }
             }
         });

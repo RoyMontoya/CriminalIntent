@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,7 +26,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
+import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,13 +40,18 @@ public class CrimeFragment extends Fragment {
 private Crime mCrime;
 private EditText mTitleField;
     private Button mDateButton;
+    private ImageView mPhotoView;
     private static final String TAG ="CrimeFragment";
     private CheckBox mSolvedCheckBox;
     public static final String EXTRA_CRIME_ID = "com.example.amado.criminalintent..crime_id";
     private static final String DIALOG_DATE ="date";
     private static final String DIALOG_SELECTOR ="selector";
     public static final int REQUEST_DATE = 0;
+    private static final int REQUEST_PHOTO = 1;
     private ImageButton mPhotoButton;
+    private static final String DIALOG_IMAGE = "image";
+    private int mOrientation;
+    private String mFileName;
     //private final UUID mCrimeid;
 
 
@@ -124,7 +133,22 @@ private EditText mTitleField;
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), CrimeCamaraActivity.class);
-                startActivity(i);
+                startActivityForResult(i, REQUEST_PHOTO);
+            }
+        });
+
+        mPhotoView = (ImageView)v.findViewById(R.id.crime_imageView);
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Photo p = mCrime.getPhoto();
+                if(p == null) return;
+
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                String path = getActivity().getFileStreamPath(p.getFilename()).getAbsolutePath();
+                ImageFragment.newInstance(path, mOrientation)
+                        .show(fm, DIALOG_IMAGE);
+
             }
         });
 
@@ -140,6 +164,17 @@ private EditText mTitleField;
         return v;
     }
 
+    private void showPhoto(){
+        Photo p = mCrime.getPhoto();
+        BitmapDrawable b = null;
+        if(p!=null){
+            String path = getActivity()
+                    .getFileStreamPath(p.getFilename()).getAbsolutePath();
+            b= PictureUtils.getScaledDrawable(getActivity(), path);
+        }
+        mPhotoView.setImageDrawable(b);
+    }
+
     public static CrimeFragment newInstance(UUID crimeId){
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_CRIME_ID, crimeId);
@@ -147,6 +182,18 @@ private EditText mTitleField;
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        PictureUtils.cleanImageView(mPhotoView);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        showPhoto();
     }
 
     @Override
@@ -161,8 +208,38 @@ private EditText mTitleField;
         if(requestCode == REQUEST_DATE){
             Date date = (Date)data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
-
            updateDate();
+        }else if(requestCode == REQUEST_PHOTO) {
+            if(mFileName!= null){
+                Log.d(TAG, "there is a file");
+                deleteLastPictureFile();
+            }
+
+            mFileName = data.getStringExtra(CrimeCamaraFragment.EXTRA_PHOTO_FILENAME);
+
+
+            mOrientation = data.getIntExtra(CrimeCamaraFragment.EXTRA_ORIENTATION, 2);
+
+            if(mOrientation == Surface.ROTATION_90&& Build.VERSION.SDK_INT>Build.VERSION_CODES.HONEYCOMB) {
+                mPhotoView.setRotation(90);
+               
+            }
+
+            if (mFileName != null) {
+                Photo photo = new Photo(mFileName);
+                mCrime.setPhoto(photo);
+                showPhoto();
+            }
+        }
+    }
+
+    private void deleteLastPictureFile() {
+        String path = getActivity()
+                .getFileStreamPath(mFileName).getAbsolutePath();
+        File file = new File(path);
+        boolean deleted = file.delete();
+        if(deleted){
+            Log.d(TAG, "last file deleted");
         }
     }
 
