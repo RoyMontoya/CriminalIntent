@@ -1,9 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".CrimeActivityFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                tools:context=".CrimeActivityFragment">
+                >
 
     <LinearLayout
         android:orientation="horizontal"
@@ -17,6 +23,9 @@
             android:layout_marginRight="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
+
+
 
             <ImageView
                 android:id="@+id/crime_imageView"
@@ -51,6 +60,8 @@
                 android:hint="@string/crime_title_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+
         </LinearLayout>
 
 
@@ -86,6 +97,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/crime_suspectButton"
+            android:layout_weight="1"
+            android:text="@string/crime_suspect_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@id/crime_reportButton"
+            android:layout_weight="1"
+            android:text="@string/crime_report_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/call_suspect"
+            android:text="@string/call_suspect"
+            android:enabled="false"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
+
 </LinearLayout>
+
+
+
+
+</ScrollView>

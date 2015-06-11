@@ -78,4 +78,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <Button
+    android:id="@+id/crime_suspectButton"
+    android:text="@string/crime_suspect_text"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/crime_reportButton"
+        android:text="@string/crime_report_text"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/call_suspect"
+        android:text="@string/call_suspect"
+        android:enabled="false"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
